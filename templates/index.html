@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- assim nos pedimos o caminho ate o arquivo e independente de onde estiver no projeto nao quebra-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+    <title>Battle of Colonos</title>
+</head>
+
+<body class="home">
+    <div class="container_options">
+        <h1 class="title">Welcome to the Character Customization</h1>
+        <div class="all_btns_options">
+            <a href="{{ url_for('character_customization.customization') }}">
+                <button class="btn_options_characters">Characters</button>
+            </a>
+            <button class="btn_options_inventory">Inventory</button>
+            <button class="btn_options_battle">Battle</button>
+        </div>  
+    </div>
+    
+</body>
+
+</html>

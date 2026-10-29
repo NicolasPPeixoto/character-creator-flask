@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- assim nos pedimos o caminho ate o arquivo e independente de onde estiver no projeto nao quebra-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+    <title>Battle of Colonos</title>
+</head>
+
+<body>
+    <div class="header">
+        <h1>Create your own Character</h1>
+    </div>
+
+    <div class="container_characters">
+
+        <div class="create_character panel">
+
+            <h3 class="panel_title"> Info</h3>
+
+            <div class="character_atributes">
+
+                {% if mode == 'create' %}
+                <form action="{{ url_for('character_customization.create') }}" method="POST">
+                    {% elif mode == 'edit' %}
+                    <form action="{{ url_for('character_customization.update', id=character.id) }} " method="POST">
+                        {% endif %}
+                        <div class="form_group">
+                            <label for="name" {% if form_errors and form_errors.get("empty_name") %} class="label_error" {%
+                                endif%}>Name</label>
+
+                            <!-- for deve ter o mesmo valor do id ou nome referente e uma das funcionalidades é focar no elemento pai quando clicado-->
+                            <input type="text" name="name" id="name" {% if form_errors and form_errors.get("empty_name") %}
+                                class="field_error" {% endif %} {% if character %} value={{character.name}} {% endif %}>
+
+                            <div {% if form_errors and form_errors.get("empty_name") %} class="speech_bubble visible" {% else %}
+                                class="speech_bubble hidden" {% endif %}>
+                                {{ form_errors.get("empty_name") }}
+                            </div>
+
+                            <label for="hair" {% if form_errors and (form_errors.get("empty_hair") or form_errors.get("invalid_hair")) %}
+                                class="label_error" {% endif %}>Hair Colors
+                            </label>
+                            <select name="hair" id="hair" {% if form_errors and form_errors.get("empty_hair") or form_errors.get("invalid_hair")
+                                %} class="field_error" {% endif %}>
+                                <option value="blue">Blue </option>
+                                <option value="red" {% if (character and character.hair=="red") or (old_input and old_input.hair == "red") %} selected {% endif %}>
+                                    Red
+                                </option>
+                            </select>
+
+                            <div {% if form_errors and (form_errors.get("empty_hair") or form_errors.get("invalid_hair") )%} class="speech_bubble visible" {% else %} class="speech_bubble hidden" {% endif %}>
+                                {{ form_errors.get("empty_hair") }}
+                                {{ form_errors.get("invalid_hair") }}
+                            </div>
+
+                            <label for="clothes" {% if form_errors and form_errors.get("empty_clothes") or form_errors.get("invalid_clothes") %}
+                                class="label_error" {% endif %}>Clothes
+                            </label>
+                            
+                            <select name="clothes" id="clothes" {% if form_errors.get("empty_clothes") or
+                                form_errors.get("invalid_clothes") %} class="field_error" {% endif %}>
+                                <option value="t-shirt">T-shirt</option>
+                                <option value="pants" {% if character and character.clothes=="pants" %} selected {%
+                                    endif %}>
+                                    Pants
+                                </option>
+                            </select>
+                            
+                            <div {% if form_errors.get("empty_clothes") or form_errors.get("invalid_clothes") %} class="speech_bubble visible" {% else %} class="speech_bubble hidden"  {% endif %}>
+                                    {{ form_errors.get("empty_clothes") }}
+                                    {{ form_errors.get("invalid_clothes") }}
+                            </div>
+
+                            {% if mode == 'create' %}
+                            <button class="btn_create_character" type="submit">Create</button>
+                            {% elif mode == 'edit' %}
+                            <button class="btn_savechanges_character" type="submit">Save Changes</button>
+                            {% endif %}
+                        </div>
+
+                    </form>
+            </div>
+        </div>
+
+        <div class="character_preview panel">
+            <h3 class="panel_title">Preview</h3>
+            <div class="preview_upcoming">
+            </div>
+        </div>
+
+
+        <div class="created_characters panel">
+
+            <h3 class="panel_title">Created</h3>
+
+            {% if characters|length == 0 %}
+            <p class="empty_characters">No characters created yet</p>
+            {% else %}
+            {% for character in characters %}
+
+            <div class="character_card">
+                <h1 class="character_name"> {{ character.name }}</h1>
+                <h3 class="character_hair"> Hair Color: {{ character.hair }}</h3>
+                <h3 class="character_clothes"> Clothes: {{ character.clothes }}</h3>
+                <div class="btns_character">
+                    <a href="{{ url_for('character_customization.edit', id=character.id) }}"><button
+                            class="btn_edit"></button>
+                    </a>
+                    <form class="form_delete" action="{{ url_for('character_customization.delete', id=character.id) }}"
+                        method="POST">
+                        <button class="btn_delete" type="submit"></button>
+                    </form>
+                </div>
+            </div>
+
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+
+</html>
