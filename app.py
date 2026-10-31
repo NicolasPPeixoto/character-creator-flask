@@ -18,6 +18,8 @@ def create_app():
             "com uma linha SECRET_KEY=sua_chave_aqui (veja .env.example)."
         )
 
+    Base.metadata.create_all(bind=engine)
+
     @app.route('/')
     def index():
         return render_template("index.html")
@@ -30,18 +32,6 @@ if __name__ == "__main__":
     app = create_app()
     app.run(debug=True)
     
-
-
-# Base.metadata.create_all(bind=engine)
-
-# character_2 = Character(name="John", hair="vermelho", clothes="calça")
-
-# session.add(character_2)
-
-# session.commit()
-
-
-
     
     
 

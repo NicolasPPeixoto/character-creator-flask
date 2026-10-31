@@ -3,10 +3,10 @@ from sqlalchemy import String, Integer, Column
 
 class Character(Base):
     __tablename__ = 'character'
-    id = Column(Integer, primary_key="true")
-    name = Column(String, nullable="false")
-    hair = Column(String, nullable="false")
-    clothes = Column(String, nullable="false")
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    hair = Column(String, nullable=False)
+    clothes = Column(String, nullable=False)
         
     def changeName(self, name):
         self.name = name
