@@ -1,5 +1,7 @@
 # Criador de Personagens (Flask)
 
+![Demonstração](docs/demo.gif)
+
 Aplicação web em Python/Flask para criar, listar, editar e excluir personagens, feita para **praticar CRUD, rotas e validação no back-end** em uma estrutura em camadas. O projeto faz parte de uma ideia maior de jogo ("Battle of Colonos"), da qual hoje só a tela de personagens está implementada.
 
 ## Funcionalidades
@@ -94,8 +96,6 @@ Acesse `http://127.0.0.1:5000` no navegador. O banco é um arquivo local (`datab
 > Sem `SECRET_KEY`, a aplicação não inicia e exibe uma mensagem explicando como configurar.
 
 ## Estado atual e próximos passos
-
-![Demonstração](docs/demo.gif)
 
 Hoje o personagem aparece na lista apenas com seus **atributos em texto**. O painel "Preview" da tela já existe, mas ainda está vazio, e os botões "Inventory" e "Battle" da página inicial ainda não têm função.
 
