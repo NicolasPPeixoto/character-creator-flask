@@ -15,7 +15,6 @@ class CharacterService:
         
         if errors:
             return Results(success=False, data=character, errors=errors)
-
         try:
             session.add(character)
             session.commit()
@@ -41,8 +40,6 @@ class CharacterService:
             return Results(success=False, data=None, errors=e)
         finally:
             session.close()
-
-         
 
     @staticmethod
     def get_character(id):
@@ -113,10 +110,9 @@ class CharacterService:
 
     @staticmethod
     def _validate_character(character):
+        from models.character_options import HAIR_COLORS, CLOTHES
+        
         errors = {}
-
-        hair = ["blue", "red"]
-        clothes = ["t-shirt", "pants"]  
 
         if not character.name:
             errors["empty_name"] = "Required field name is empty!"
@@ -127,10 +123,10 @@ class CharacterService:
         if not character.clothes:
             errors["empty_clothes"] = "Required field clothes is empty!"
 
-        if character.hair not in hair:
+        if character.hair not in HAIR_COLORS:
             errors["invalid_hair"] = "Invalid Hair!"
 
-        if character.clothes not in clothes:
+        if character.clothes not in CLOTHES:
             errors["invalid_clothes"] = "Invalid Clothes!"
 
         if errors:

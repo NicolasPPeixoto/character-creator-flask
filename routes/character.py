@@ -1,10 +1,12 @@
 from flask import Blueprint, render_template, request, url_for, redirect, session
 from utils.Results import Results
 from services.character_service import CharacterService
+from models.character_options import HAIR_COLORS, CLOTHES
 
 character_customization_bp = Blueprint(
     "character_customization", __name__, url_prefix="/customization"
 )
+
 
 @character_customization_bp.route("", methods=["GET"])
 def customization():
@@ -13,14 +15,16 @@ def customization():
 
     form_errors = session.pop("form_errors", {})
     old_input = session.pop("old_input", {})
-
+    
     return render_template(
         "character_customization.html",
+        hair_colors=HAIR_COLORS,
+        clothes=CLOTHES,
         characters=characters.data,
         mode=mode,
         errors=characters.errors,
-        form_errors = form_errors,
-        old_input = old_input
+        form_errors=form_errors,
+        old_input=old_input,
     )
 
 
@@ -28,11 +32,13 @@ def customization():
 def create():
     mode = "create"
     # quando tiver muitos atributos, passar o objeto inteiro
-   
-    results = CharacterService.create_character(request.form.get("name"), request.form.get("hair"), request.form.get("clothes"))
+
+    results = CharacterService.create_character(
+        request.form.get("name"), request.form.get("hair"), request.form.get("clothes")
+    )
 
     if results.errors:
-        
+
         session["form_errors"] = results.errors
         session["old_input"] = request.form
         
@@ -45,42 +51,39 @@ def edit(id):
 
     results = CharacterService.get_character(id)
     characters = CharacterService.list_all_characters()
+    
+    form_errors = session.pop("form_errors", {})
+    old_input = session.pop("old_input", {})
 
     return render_template(
         "character_customization.html",
+        hair_colors=HAIR_COLORS,
+        clothes=CLOTHES,
         mode=mode,
         character=results.data,
         characters=characters.data,
-        form_errors=results.errors,
+        form_errors=form_errors,
+        old_input=old_input
     )
-    
+
     # se tiver erro precisa fazer redirect pro get customization
 
 
 @character_customization_bp.route("/update/<int:id>", methods=["POST"])
 def update(id):
-    
 
     name = request.form.get("name")
     hair = request.form.get("hair")
     clothes = request.form.get("clothes")
-
+    
     results = CharacterService.update_character(id, name, hair, clothes)
 
     if results.errors:
-        mode = "edit"
+        session["form_errors"] = results.errors
+        session["old_input"] = request.form
         
-        character = CharacterService.get_character(id)
-        
-        characters = CharacterService.list_all_characters()
-        
-        return render_template(
-            "character_customization.html",
-            character=character.data,
-            characters=characters.data,
-            errors=results.errors,
-            mode=mode,
-        )
+        return redirect(url_for("character_customization.edit", id=id))
+    
     return redirect(url_for("character_customization.customization"))
 
 
